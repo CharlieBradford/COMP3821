@@ -1,0 +1,149 @@
+2.1-1
+	1. (31, 41, 59, 26, 41, 58)
+	2. (26, 31, 41, 59, 41, 58)
+	3. (26, 31, 41, 41, 59, 58)
+	4. (26, 31, 41, 41, 58, 59)
+
+2.1-2
+	for j in 2..A.length
+		key = A[j]
+		i = j+1
+		while i > 0 && A[i] > key
+			A[i-1] = A[i]
+			i = i + 1
+		A[i-1] = key
+
+2.1-3
+	for j in 0..A.length-1
+		if A[j] = v
+			return j
+
+	return nil
+
+2.1-4
+	carry = 0
+	for i in 0..A.length-1
+		temp = A[i] + B[i] + carry
+		C[i] = temp % 0b10
+		carry = temp // 0b10
+	C[A.length] = carry
+
+========================================
+			
+2.2-1
+	n^3 / 1000 + 100 * n^2 - 100 * n + 3
+	= theta( n^3 )
+
+2.2-2
+	min = 0
+	for i in 0..A.length-1
+		for j in i+1..A.length-1
+			if A[j] < A[i]
+				temp = A[j]
+				A[j] = A[i]
+				A[i] = temp
+
+2.2-4
+	Early exit
+
+
+========================================
+
+2.3-1
+	A = (3, 41, 52, 26, 38, 57, 9, 49)
+	
+	1. (3), (41), (52), (26), (38), (57), (9), (49)
+	2. (3, 41), (26, 52), (38, 57), (9, 49)
+	3. (3, 26, 41, 52), (9, 38, 49, 57)
+	4. (3, 9, 26, 38, 41, 49, 52, 57)
+
+2.3-2
+	merge(A, p, q, r)
+		ind1 = q - p + 1
+		ind2 = r - q
+		
+		L[ind1]
+		R[ind2]
+		
+		for i = 0 to ind1
+			L[i] = A[p + i - 1]
+		for i = 0 to ind2
+			R[i] = A[q + j]
+
+		i = 0
+		j = 0
+		for k in p..q
+			if i < ind1
+				if L[i] < R[j]
+					A[k] = L[i]
+					i = i + 1
+			if j < ind2
+				if R[j] < L[i]
+					A[k] = R[j]
+					j = j + 1
+
+2.3-3
+	Case n = 2
+		T(2) = 2
+		2 log 2 = 2 * 1 = 2
+		True
+	Case n = k
+		T(k) = k * log k
+	Case n = k * 2
+		T(k * 2) = 2T(k * 2 / 2) + 2 * k
+		= 2T(k) + k
+		= 2 * k * log k + 2 * k
+		= 2klog k + 2klog2 
+		= 2klog 2k
+
+2.3-4
+	T(n) = T(n-1) + n
+	T(n) = n^2
+
+2.3-5
+	findv(A, p, q, v)
+		if p == q
+			return A[p] == v ? p : nil
+		r = floor( (p + q)/2 )
+		if A[r] > v
+			return findv(A, r, q, v)
+		elif A[r] < v
+			return findv(A, p, r, v)
+		else
+			return r
+
+2.3-7
+	Array T of length S values all False
+	for n in S
+		if T[n] = True
+			return True
+		else 
+			T[x - n] = True
+		
+	 
+		
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+			

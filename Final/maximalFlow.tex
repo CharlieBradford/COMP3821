@@ -1,0 +1,70 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{csquotes}
+\usepackage{blindtext}
+\usepackage{xfrac}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{stackengine}
+\setlist[description]{leftmargin=\parindent,labelindent=\parindent}
+\title{% 
+		COMP3821 \\
+\large Maximal Flow Practice}
+\author{Charlie Bradford z5114682}
+\date{\today}
+
+\begin{document}
+\vspace{-2cm}
+\maketitle
+
+\begin{enumerate}
+		
+		\item You are running a dating agency and have $m$ guys and $f$ girls as customers. Each guy and each girl have reviewed all profiles of the candidates of opposite sex and have sent you their corresponding lists of people whose profiles they liked. Your task is to organise a largest possible number of first dates so that everyone meets at most one person of opposite sex and so that both parties liked each others profile (i.e., have included the other party on their list of people whose profile they liked).
+				\begin{itemize}
+						\item Connect a super-source to all the women
+						\item Set all outgoing edges of the super-source to have capacity one
+						\item Connect a super-sink to all the men
+						\item Set all incoing edges of the super-sink to have capacity one
+						\item Create edges of capacity one between all the women and men that like eachother
+						\item Use the Edmonds-Karp algorithm to find the maximal flow of the graph
+						\item All links that have flow are first dates between their respectived nodes
+				\end{itemize}
+
+		\item Assume that you are the administrator of a network of computers; each computer is connected by unidirectional fiberoptic cables to a few other computers on the same network (so the network can be modeled by a directed graph). You noticed that computers $P_1,\ P_2,\ \dots,\ P_n$ are mounting an attack on computers $Q_1,\ Q_2,\ \dots,\ Q_m$. The total number of computers on the network is $N\ >\ m\ +\ n$. Since it is a real emergency, you must disconnect some of the optical cables of the network so that none of computers $P_1,\ P2,\ \dots,\ P_n$ can send packets to any of $Q_1,\ Q_2,\ \dots,\ Q_m$. Since you must send crews to disconnect some of the fiberoptic cables, for each cable $c_{ij}$ for traffic from a computer $X_i$ to a computer $X_j$ there is an associated cost $c_{ij}$ for disconnecting it. Your task is to design an algorithm for determining which cables to disconnect to isolate computers $Q_1,\ Q_2,\ \dots,\ Q_m$ from all of the computers $P_1,\ \dots,\ P_n$ so that the total cost incurred is minimal.
+				\begin{itemize}
+						\item Create a maximal flow graph, with each node being a computer and each edge being being a link with capacity equal to its bandwidth 
+						\item Connect a super-source to all computers $P$
+						\item Set the capacity of the edges between the super-source and each node to be equal to the total outgoing capacity of the node
+						\item Connect a super-sink to all computers $Q$
+						\item Set the capacity of the edges between each node and the super-sink to be equal to the total incoming capacity of the node
+						\item Use the Edmonds-Karp algorithm to find the maximal flow
+						\item All nodes accesible via augmenting paths from the super sink form one side of the minimal cut
+						\item Disconnect all outgoing cables from those nodes that have flow
+						\item As this is the minimal cut, you have disconnected the cables with least total  bandwidth, but still cut computers $P$ of from computers $Q$
+				\end{itemize}
+
+		\item You work for a new private university which wants to keep the sizes of classes small. Each class is assigned its maximal capacity - the largest number of students which can enrol in it. Students pay the same tuition fee for each class they get enrolled in. Students can apply to be enrolled in as many classes as they wish, but each of them will eventually be enrolled to at most 5 classes at any given semester. You are given the wish lists of all students, containing for each student the list of all classes they would like to enrol this particular semester and you have to chose from the classes they have put on their wish lists in which classes you will enrol them, without exceeding the maximal enrollment of any of the classes and without enrolling any student into more than 5 classes. Your goal is, surprisingly, to maximise the income from the tuition fees for your university. Design an efficient algorithm for such a task.
+
+		\item  Assume each student can borrow at most 10 books from the library, and the library has three copies of each title in its inventory. Each student submits a list of books he wishes to borrow. You have to assign books to students, so that a maximal number of volumes is checked out.
+
+
+		\item The emergency services are responding to a major earthquake that has hit a wide region, and left n people injured who need to be sent to a hospital. Let $P$ be the set of $n$ people and $H$ be the set of $k$ hospitals. Several hospitals are available to treat these people, but there are some constraints:
+				\begin{enumerate}[label={(\alph*)}]
+						\item Each injured person needs to be sent to a hospital no further than one hour drive away. Let $H_p$ be the set of hospitals that are within range for person $p$.
+						\item Each hospital $h$ has a capacity $c_h$, the maximum number of people that the hospital can receive.
+				\end{enumerate}
+				Design an efficient algorithm that determines whether it is possible to assign each person to a hospital in a way that satisfies these constraints, and returns such an assignment if so.
+\end{enumerate}
+
+\end{document}
+
+
+

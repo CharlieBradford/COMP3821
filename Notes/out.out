@@ -1,0 +1,37 @@
+\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
+\BOOKMARK [1][-]{section.2}{Algorithm Analysis}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Asymptotic Behaviour}{section.2}% 3
+\BOOKMARK [2][-]{subsection.2.2}{The Master Theorem}{section.2}% 4
+\BOOKMARK [2][-]{subsection.2.3}{Fast Integer Multiplication}{section.2}% 5
+\BOOKMARK [2][-]{subsection.2.4}{Problems}{section.2}% 6
+\BOOKMARK [1][-]{section.3}{Divide-And-Conquer Method}{}% 7
+\BOOKMARK [2][-]{subsection.3.1}{Weighing Coins}{section.3}% 8
+\BOOKMARK [2][-]{subsection.3.2}{Multiplying Polynomials}{section.3}% 9
+\BOOKMARK [2][-]{subsection.3.3}{Fast Fourier Transform}{section.3}% 10
+\BOOKMARK [2][-]{subsection.3.4}{Discrete Fourier Transform}{section.3}% 11
+\BOOKMARK [1][-]{section.4}{The Greedy Method}{}% 12
+\BOOKMARK [2][-]{subsection.4.1}{Activity Selection}{section.4}% 13
+\BOOKMARK [2][-]{subsection.4.2}{Djikstra's Algorithm}{section.4}% 14
+\BOOKMARK [2][-]{subsection.4.3}{Machining Problem}{section.4}% 15
+\BOOKMARK [2][-]{subsection.4.4}{Discrete Knapsack Problem}{section.4}% 16
+\BOOKMARK [2][-]{subsection.4.5}{Huffman Codes}{section.4}% 17
+\BOOKMARK [2][-]{subsection.4.6}{Set Cover Approximation}{section.4}% 18
+\BOOKMARK [1][-]{section.5}{Dynamic Programming}{}% 19
+\BOOKMARK [1][-]{section.6}{Network Flow Algorithms}{}% 20
+\BOOKMARK [2][-]{subsection.6.1}{Ford-Fulkerson Algorithm}{section.6}% 21
+\BOOKMARK [2][-]{subsection.6.2}{Minimal Cut}{section.6}% 22
+\BOOKMARK [2][-]{subsection.6.3}{Edmonds-Karp Algorithm}{section.6}% 23
+\BOOKMARK [2][-]{subsection.6.4}{Multiple Sources \046 Sinks}{section.6}% 24
+\BOOKMARK [2][-]{subsection.6.5}{Other problems}{section.6}% 25
+\BOOKMARK [3][-]{subsubsection.6.5.1}{Maximal Matching of Bipartite Graphs}{subsection.6.5}% 26
+\BOOKMARK [3][-]{subsubsection.6.5.2}{Movie Rental}{subsection.6.5}% 27
+\BOOKMARK [3][-]{subsubsection.6.5.3}{Computer Network}{subsection.6.5}% 28
+\BOOKMARK [1][-]{section.7}{String Matching}{}% 29
+\BOOKMARK [2][-]{subsection.7.1}{Rabin-Karb}{section.7}% 30
+\BOOKMARK [1][-]{section.8}{Linear Programming}{}% 31
+\BOOKMARK [1][-]{section.9}{Intractable Problems and Approximation Algorithms}{}% 32
+\BOOKMARK [1][-]{section.10}{Randomisation}{}% 33
+\BOOKMARK [2][-]{subsection.10.1}{Random Select}{section.10}% 34
+\BOOKMARK [2][-]{subsection.10.2}{Linear Time for Order}{section.10}% 35
+\BOOKMARK [2][-]{subsection.10.3}{Hash Functions}{section.10}% 36
+\BOOKMARK [2][-]{subsection.10.4}{Skip Lists}{section.10}% 37

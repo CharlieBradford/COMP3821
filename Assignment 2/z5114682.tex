@@ -1,0 +1,211 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{csquotes}
+\usepackage{blindtext}
+\usepackage{xfrac}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage[noend]{algpsuedocode}
+\setlist[description]{leftmargin=\parindent,labelindent=\parindent}
+\title{% 
+		COMP3821 \\
+\large Assignment 2}
+\author{Charlie Bradford z5114682}
+\date{\today}
+
+\begin{document}
+\vspace{-2cm}
+\maketitle
+
+\begin{enumerate}
+		\item \begin{enumerate}
+						\item In two n-degree polynomials, $P_a$ and $P_b$, the value of the product at a certain point, $P_c (x)$, can be found by multiplying $P_a (x)$ and $P_x (x)$. Further, $P_c$ has at most $2n-1$ coefficients, so finding the value of $P_c$ at $2n-1$ different points is enough to determine the exact values of all the different coefficients. When n is sufficiently large, any number that does not have a modulus of exactly 1 can become impossible to represent, so to prevent this the points tested are $2n-1^th$ roots of unity. We then pad $P_a$ and $P_b$ to length $2n-1$ with zeroes. We use the FFT to find the DFT ($P(x)$ for all $x=\omega_{2n-1}^{i}, 0 \leq i \leq 2n-2$) of both polynomials. We multiply these sequences point wise to find the value of $P_c$ at all these points. Then we use a series of linear equations (or more easily a matrix multiplication, see below) to figure out each of the coefficients of $P_c$.
+        \begin{align*}
+            \left[ \begin{array}{c} C_0 \\ C_1 \\ C_2 \\ \vdots \\ C_{2n} \end{array} \right] &=
+            \left[ \begin{array}{ccccc} 1 & 1 & 1 & \dots & 1 \\ 1 & \omega_{2n-1} & \omega_{2n-1}^2 & \dots & \omega_{2n-1}^{2n} 
+            \\ 1 & \omega_{2n-1}^2 & \omega_{2n-1}^{2*2} & \dots & \omega_{2n-1}^{2*2n} 
+            \\ \vdots & \vdots & \vdots & \ddots & \vdots \\
+            1 & \omega_{2n-1}^{2n} & \omega_{2n-1}^{2n * 2} & \dots & \omega_{2n-1}^{2n * 2n} \\
+                \end{array}\right]^{-1} \left[ \begin{array}{c} P_c (1) \\ P_c (\omega_{2n}^1) \\ P_c (\omega_{2n}^{2})\\ \vdots \\ P_c (\omega_{2n-1}^{2n-2}) \end{array} \right] \\
+                &=
+                \frac{1}{n}
+                \left[ \begin{array}{ccccc} 1 & 1 & 1 & \dots & 1 \\ 1 & \omega_{2n-1}^{-1} & \omega_{2n-1}^{-2} & \dots & \omega_{2n-1}^{-2n} 
+                \\ 1 & \omega_{2n-1}^{-2} & \omega_{2n-1}^{-(2*2)} & \dots & \omega_{2n-1}^{-(2*2n)} 
+            \\ \vdots & \vdots & \vdots & \ddots & \vdots \\
+                1 & \omega_{2n-1}^{-(2n)} & \omega_{2n-1}^{-(2n * 2)} & \dots & \omega_{2n-1}^{-(2n * 2n)} \\
+            \end{array}\right]  \left[ \begin{array}{c} P_c (1) \\ P_c (\omega_{2n}) \\ P_c (\omega_{2n}^{2})\\ \vdots \\ P_c (\omega_{2n}^{2n-1}) \end{array} \right] \\
+        \end{align*}
+\item \begin{enumerate}
+				\item To determine the coeffecients of an $S$ degree polynomial $P$ we need to know the value of $P$ at $S+1$ different values. So we pad each polynomial $P_1 ... P_k$ to length $S+1$. Then we take the FFT of all of them in $K*O(SlogS)=O(KSlogS)$ time. Then we multiply all values point wise. Finally we take the IFFT on the product in $O(SlogS)$ time, leading to a final complexity of $O(KSlogS)$.
+				\item Split the polynomials into two groups. Keep splitting each group into two until all groups contain either two or one polynomials. Pad each polynomial with zeroes to length $S+1$. For groups with two polynomials multiply them using the FFT and IFFT in $O(SlogS)$ time. Combine all groups into new groups of two (with a possible group of one). Multiply them as before. Continue until there is only one polynomial. Each level of recursion had at most one multiplication in time $O(SlogS)$ and there were at most $K+1$ levels of recursion leading to a final time complexity of $O((logK)SlogS) = O(SlogSlogK)$.
+\end{enumerate}
+
+		\end{enumerate}
+\item Create the polynomial $V(x) = x^{v_1} + x^{v_2} + ... + x^{v_N}$ with $v_i$ being the value of each of the $N$ coins. Also create the polynomial $R(x) = x^{2v_1} + x^{2v_2} + ... x^{2v_N}$. Pad $V(x)$ to length $2M+1$ with zeroes. The use the FFT and IFFT to compute $F(x) = (V(x))^2$. $V(x)$ is of degree $M$ so this can be done in $O(MlogM)$ time. The powers of $F(x)$ are all possible values of the sums of any two coins in the bag. However $F(x)$ also includes cases of coins being summed with them selves. So we subract $R(x)$ from $F(x)$ to account for the 'no replacement' condition. 
+\item \begin{enumerate}
+
+	\item \begin{proof}
+		Base Case $n=1$: $\left(\begin{smallmatrix}F_{n+1}&F_{n}\\ F_{n}&F_{n-1}\end{smallmatrix}\right) = \left(\begin{smallmatrix}F_{2}&F_{1}\\ F_{1}&F_{0}\end{smallmatrix}\right) =  \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)^1$ \\
+		Inductive Hypothesis: Assume the theorem holds true for all values of $n$ up to some $k$, $k \geq 1$.
+		Inductive Step: Let $n = k+1$. We already have $$\left(\begin{smallmatrix}F_{k+1}&F_{k}\\ F_{k}&F_{k-1}\end{smallmatrix}\right) = \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)^k$$ 
+				So now we take our RHS 
+				\begin{align*}
+						\left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)^{k+1} &= \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)^k \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right) \\
+						&= \left(\begin{smallmatrix}F_{k+1}&F_{k}\\ F_{k}&F_{k-1}\end{smallmatrix}\right) \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right) \\
+						&= \left(\begin{smallmatrix}F_{k+1} + F_{k} &F_{k}+F_{k-1}\\ F_{k} + F_{k-1} &F_{k}\end{smallmatrix}\right) \\
+						&= \left(\begin{smallmatrix}F_{k+2}&F_{k+1}\\ F_{k+1}&F_{k}\end{smallmatrix}\right) \\
+						&= \left(\begin{smallmatrix}F_{n+1}&F_{n}\\ F_{n}&F_{n-1}\end{smallmatrix}\right) 
+				\end{align*}
+\end{proof}
+
+
+								\item At most $2logn$ multiplications are needed, give a time complexity of $O(logn)$. The procedure is outlined as Algorithm 1 at the end of this assignment.
+									
+\end{enumerate}
+\item We create wishlists for Alice and Bob by rearranging the sequence $[1..N]$ in non-increasing order of how much they are willing to pay for an item. Then we iterate from $1$ to $N$, offering each item to both parties and selling to the highest bidder. Items are not put up for auction if they are already sold and neither Alice nor Bob is offered an item if they have reached their item limit. This method ensures that both parties buy all their most valuable items unless the other is willing to pay more for it. Creating the wish list uses a modified version of Quicksort and runs in $O(nlogn)$, and iterating through $[1..N]$ is linear, leading to $O(nlogn)$ total time complexity. The full algorithm is out lined in Algorithm 2 at the end of this assignment.
+		\item \begin{enumerate}
+				\item We iterate through all giants taking the first available leader above height $T$. We then skip the next $K$ giants and take the next available leader. We continue, keeping track of the number of leaders until we get to the end. We then check that we found at least $L$ leaders, and return True of False depending on that condition.
+				\item We sort $H$ and perform a binary search using the Decision algorithm as our check conditions $logn*O(n)=O(nlogn)$
+						
+
+\end{enumerate}
+        
+\end{enumerate}
+\begin{algorithm}
+				\caption{Fibonacci Numbers}
+				\begin{algorithmic}
+						\Function{Fibonacci*}{$k$}
+						\State $\textit{base} \gets \left(\begin{smallmatrix}1&1\\1&0\end{smallmatrix}\right)$
+						\If{$k = 1$} 
+						\State \Return \textit{base}
+						\ElsIf{$k \equiv 1 \text{mod }2$}
+						\State \Return \textit{base}$ * ($\Call{Fibonacci*}{$\frac{k-1}{2}$}$)^2$
+						\Else 
+						\State \Return $($\Call{Fibonacci*}{$\frac{k}{2}$}$)^2$
+						\EndIf
+						\EndFunction
+						\Function{Fibonacci}{$k$}
+						\State $M \gets $ \Call{Fibonacci*}{$k$}
+						\State \Return $M_{1,2}$
+						\EndFunction
+				\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+				\caption{Bidding War}
+				\begin{algorithmic}
+						\Function{Get Wish List}{$S$, \textit{lo}, \textit{hi}, $R$}
+						\State $p \gets $\Call{Partition}{$S$, \textit{lo}, \textit{hi}, $R$} 
+						\State \Call{Get Wish List}{$S$, \textit{lo}, $p$, $R$}
+						\State \Call{Get Wish List}{$S$, $p + 1$, \textit{hi}, $R$}
+						\EndFunction
+
+						\Function{Partition}{$S$, \textit{lo}, \textit{hi}, $R$}
+						\State $\textit{pivot} \gets S[lo]$
+						\State $j \gets \textit{lo} - 1$
+						\State $i \gets \textit{hi} + 1$
+						\While{True}
+						\State $i \gets i + 1$
+						\State $j \gets j - 1$
+						\While{$S[i] < \textit{pivot}$}
+						\State $i \gets i + 1$
+						\EndWhile
+						\While{$S[j] > \textit{pivot}$}
+						\State $j \gets j - 1$
+						\EndWhile
+						\If{$i \geq j$} \Return $j$ \EndIf
+						\State $\textit{tmp} \gets S[i]$
+						\State $S[i] \gets S[j]$
+						\State $S[j] \gets \textit{tmp}$
+						\State $\textit{tmp} \gets R[i]$
+						\State $R[i] \gets R[j]$
+						\State $R[j] \gets \textit{tmp}$
+						\EndWhile
+						\EndFunction
+						\Function{Allocate Items}{$N$, $A$, $B$, $a$, $b$}
+						\State $a_{\textit{copy}} \gets a$
+						\State $a_{\textit{copy}} \gets a$
+						\State $\textit{aWishList} \gets [1..N]$
+						\State $\textit{bWishList} \gets [1..N]$
+						\State \Call{Get Wish List}{$a_{\textit{copy}}$, $1$, $N$, \textit{aWishList}}
+						\State \Call{Get Wish List}{$b_{\textit{copy}}$, $1$, $N$, \textit{bWishList}}
+						\State $\textit{allocated} \gets \{\text{False}|i\in[1..N]\}$
+						\State $\textit{aItems} \gets 0$
+						\State $\textit{bItems} \gets 0$
+						\State $\textit{sum} \gets 0$
+						\While{$i$ $\leq$ $N$}
+						\If{$\neg\textit{allocated}[\textit{aWishList}[i]]$}
+						\If{$a[\textit{aWishList}[i]] \geq b[\textit{aWishList}[i]] \land \textit{aItems} \leq A$}
+						\State $\textit{sum} \gets \textit{sum} + a[\textit{aWishList}[i]]$
+						\State $\textit{aItems} \gets \textit{aItems} + 1$
+						\Else 
+						\State $\textit{sum} \gets \textit{sum} + b[\textit{aWishList}[i]]$
+						\State $\textit{bItems} \gets \textit{bItems} + 1$
+						\EndIf
+						\State $\textit{allocated}[\textit{aWishList}[i]] \gets \text{True}$
+						\EndIf
+						\If{$\neg\textit{allocated}[\textit{bWishList}[i]]$}
+						\If{$b[\textit{aWishList}[i]] \geq a[\textit{aWishList}[i]] \land \textit{bItems} \leq B$}
+						\State $\textit{sum} \gets \textit{sum} + b[\textit{aWishList}[i]]$
+						\State $\textit{bItems} \gets \textit{bItems} + 1$
+						\Else 
+						\State $\textit{sum} \gets \textit{sum} + a[\textit{aWishList}[i]$
+						\State $\textit{aItems} \gets \textit{aItems} + 1$
+						\EndIf
+						\State $\textit{allocated}[\textit{bWishList}[i]] \gets \text{True}$
+						\EndIf
+						\EndWhile
+						\State \Return \textit{sum}
+						\EndFunction
+				\end{algorithmic}
+\end{algorithm}
+
+
+
+\begin{algorithm}
+				\caption{Finding Giants}
+				\begin{algorithmic}
+						\Function{Decision}{$N$, $K$, $L$, $H$, $T$}
+						\State $\textit{leaders} \gets 0$
+						\State $\textit{gap} \gets 0$
+						\State $ i \gets 0$
+						\While{$i$ $<$ $N$} 
+						\If{$H[i]$ $\geq$ $T$ $\land$ \textit{gap} $\leq$ $0$}
+						\State $\textit{leaders} \gets \textit{leaders} + 1$
+						\State $\textit{gap} \gets K$
+						\Else
+						\State $\textit{gap} \gets \textit{gap} - 1$
+						\EndIf
+						\State $i \gets i + 1$
+						\EndWhile
+						\State \Return $(\textit{leaders} \geq L)$
+						\EndFunction
+						\Function{Optimisation}{$N$, $K$, $L$, $H$}
+						\State $H \gets $\Call{Quicksort}{$H$}
+						\State $\textit{top} \gets N$
+						\State $\textit{bottom} \gets 0$
+						\State $\textit{max} \gets 0$
+						\While{\textit{top} $\geq$ \textit{bottom}}
+						\State $\textit{average} \gets \lfloor\frac{\textit{top} - \textit{bottom}}{2}\rfloor$
+						\If{\Call{Decision}{$N$, $K$, $L$, $H$, \textit{average}}}
+						\State $\textit{max} \gets \textit{average}$
+						\State $\textit{bottom} \gets \textit{average} + 1$
+						\Else
+						\State $\textit{top} \gets \textit{average} - 1$
+						\EndIf
+						\EndWhile
+						\State \Return \textit{max}
+						\EndFunction
+				\end{algorithmic}
+		\end{algorithm}
+\end{document}

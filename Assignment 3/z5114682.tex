@@ -1,0 +1,218 @@
+\documentclass[a4paper]{article}
+\usepackage[margin=1.5cm]{geometry}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumitem}
+\usepackage{stmaryrd}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[latin1]{inputenc}
+\usepackage{csquotes}
+\usepackage{blindtext}
+\usepackage{xfrac}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{stackengine}
+\usepackage[noend]{algpsuedocode}
+\setlist[description]{leftmargin=\parindent,labelindent=\parindent}
+\title{% 
+		COMP3821 \\
+\large Assignment 3}
+\author{Charlie Bradford z5114682}
+\date{\today}
+
+\begin{document}
+\vspace{-2cm}
+\maketitle
+
+\begin{enumerate}
+		\item
+				\begin{enumerate}
+						\item $A\ =\ \langle 1000, 1001, 1000\rangle$
+						\item $A\ =\ \langle 1000, 1, 1, 1000\rangle$
+						\item 
+								\begin{algorithm}
+										\begin{algorithmic}
+												\Function{Greatest Sum}{$A$, $n$}
+												\State var $m[n+1]$
+												\State $m[0]\ \gets\ 0$
+												\State $m[1]\ \gets\ A[1]$
+												\For{$i\ \in\ [1..n]$}
+												\State $m[i]\ \gets\ $\Call{max}{$m[i-2]+A[i]$, $m[i-1]$}
+												\EndFor
+												\Return $m[n]$
+												\EndFunction
+										\end{algorithmic}
+								\end{algorithm}
+				\end{enumerate}
+		\item 	
+				\begin{algorithm}
+						\begin{algorithmic}
+								\Function{min-cost retreat}{CEO}
+								\State $m,\ n\ :=\ $\Call{min-cost retreat*}{CEO}
+								\Return \Call{min}{$m,\ n$}
+								\EndFunction
+								\Function{min-cost retreat*}{$n$}
+								\State $w\ \gets\ n.cost$
+								\State $o\ \gets\ 0 $
+								\If{$n.next\ \neq\ $null}
+								\For{$ x\ \in\ n.next$} 
+								\State $n,\ m\ \gets\ $\Call{min-cost retreat*}{$x$}
+								\State $w\ \gets\ w\ +\ n$
+								\State $o\ \gets\ o\ +\ m $
+								\EndFor
+								\EndIf
+								\Return $o,\ w$
+								\EndFunction
+						\end{algorithmic}
+				\end{algorithm}
+
+		\item This is a dynamic programming problem. Create a matrix that has the dimensions $(m+1)*(n+1)$, where $m$ and $n$ are the lengths of the two strings. Initialise the first column (the one of length $m+1$) to 1 and the rest to 0. Move through the matrix, checking if each letter matches. If they do then the value is set as equal to the number of matches for all letter up to those currently considered for both strings, otherwise the value in the matrix is set to the same value for the next character in the longer string. This explanation was bad, but the psuedo code at the end is much better.
+		\item 
+				\begin{enumerate}
+						\item This is a dynamic programming problem. Create an ($n$+1)*($n$+1) matrix and intialise every value to zero. Starting at 1,1, set every value to be the maximum of the values above and to the left plus the value stored in A. Full code at the end.
+						\item As above, but also intialise a ($n$+1)*($n$+1) matrix of empty strings. If the number above the square is larger append ``D'', else append ``R'', the string at $n$, $n$ is the most valuable path.
+						\item As each value in the matrix depends on only its direct predecesor (either above or the the left) we can calculate the matrix in lines as below. The matrices below are just representations and the implementation could use arrays or some other method. $x$s represent unstored, empty values. The below shows path values, but an identical method could be put in place for storing paths. This method uses O($n$) extra space which is less than the O($n\sqrt{n}$) required.
+								\begin{align*}
+										&
+										\begin{bmatrix}
+												x & 0 & x & x & x & \hdots & x \\
+												0 & x & x & x & x & \hdots & x \\
+												x & x & x & x & x & \hdots & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\
+												x & x & x & x & x & \hdots & x \\
+										\end{bmatrix} \\
+										&
+										\begin{bmatrix}
+												x & 0 & 0 & x & x & \hdots & x \\
+												0 & \text{\textcolor{blue}{$A[1][1]$}} & x & x & x & \hdots & x \\
+												0 & x & x & x & x & \hdots & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\
+												x & x & x & x & x & \hdots & x \\
+										\end{bmatrix} \\
+										&
+										\begin{bmatrix}
+												x & x & 0 & 0 & x & \hdots & x \\
+												x & A[1][1] & \text{\textcolor{blue}{$A[1][1] + A[1][2]$}} & x & x & \hdots & x \\
+												0 & \text{\textcolor{blue}{$A[1][1] + A[2][1]$}} & x & x & x & \hdots & x \\
+												0 & x & x & x & x & \hdots & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\
+												x & x & x & x & x & \hdots & x \\
+										\end{bmatrix} \\
+										&
+										\begin{bmatrix}
+												x & x & x & 0 & 0 &\hdots & x \\
+												x & x & A[1][1] + A[1][2] & \text{\textcolor{blue}{{\tiny $A[1][1] + A[1][2] + A[1][3]$}}} & x & \hdots & x \\
+												x & A[1][1] + A[2][1] & \text{\textcolor{blue}{{\tiny max\stackanchor{$(A[1][1] + A[2][1] + A[2][2], $}{ $ A[1][1] + A[1][2] + A[2][2])$}}}} & x & x & \hdots & x \\
+												0 & \text{\textcolor{blue}{{\tiny $A[1][1] + A[2][1]+ A[3][1]$}}} & x & x & x & \hdots & x \\
+												0 & x & x & x & x & \hdots & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots\\
+												x & x & x & x & x & \hdots & x \\
+										\end{bmatrix} \\
+										&\qquad \vdots \quad \vdots \quad \vdots \\
+										&
+										\begin{bmatrix}
+												x & x & x & x & x & \hdots & x & x\\
+												x & x & x & x & x & \hdots & x & x\\
+												x & x & x & x & x & \hdots & x & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+												x & x & x & x & x & \hdots & x & v_1\\
+												x & x & x & x & x & \hdots & v_2 & x\\
+										\end{bmatrix} \\
+										&
+										\begin{bmatrix}
+												x & x & x & x & x & \hdots & x & x\\
+												x & x & x & x & x & \hdots & x & x\\
+												x & x & x & x & x & \hdots & x & x \\
+												\vdots&\vdots&\vdots&\vdots&\vdots&\ddots&\vdots&\vdots\\
+												x & x & x & x & x & \hdots & x & v_1\\
+												x & x & x & x & x & \hdots & v_2 & \text{\textcolor{blue}{\tiny max\stackanchor{$(v_1 + A[n][n],$}{ $ v_2 + A[n][n])$}}} \\
+										\end{bmatrix}
+								\end{align*}
+
+				\end{enumerate}
+		\item 
+				\begin{itemize}
+						\item Add a super-source that connects to vertex $u$ and the source $s$, and a super-sink that connect to vertex $v$ and the sink $t$.
+						\item Set the edges from the super-source to the $s$ and $u$ to have capacity equal to the gross output of the source and vertex $u$, respectively.
+						\item Set th edges to the super-sink from $t$ and the $v$ have capacity equal to the gross input of the sink and vertex $v$, respectively.
+						\item Use the Edmonds-Karp algorithm to find the max-flow.
+						\item All edges accessible from the super-source in the residual flow network are one side of the cut.
+						\item All other edges form the other side.
+				\end{itemize}
+		\item
+				\begin{enumerate}
+						\item The smallest amount of money $T$ that allows her to go on all $S$ rides is the amount with which she has the least leftover after receiving her final deposit back. Thus if $T$ is the smalles amount of money then the last ride must be the one with the smallest deposit. Allowing for rides that may have deposits equal to or greather than the sum of the deposits for all rides with smaller deposits then those rides must also be riden before all the other rides, to allow for the smallest possible value of $T$. Thus if she has enough money to ride all $S$ rides, then she has at least enough to ride them in non-increasing order of deposit.
+						\item Sort $D$ and $C$ by their cost. For an array with $T+1$ values find the number of rides that can be gone on for each index in $T$ by iterating through C and D to find the number and using the value for the previous index as a starting point.
+						\item No, T may increase exponentially compared to $n$.
+						\item Sort $D$ and $C$ by their cost. Iterate through $C$ and $D$ (low to high) and add on the next ride when possible to find the largest amount of rides to go on  before the cost exceeds $T$. Sorting is $nlogn\ <\ n^2$ and there are at most $n$ rides to go on.
+
+				\end{enumerate}
+\end{enumerate}
+
+\begin{algorithm}
+		\begin{algorithmic}
+				\Function{subStringCount}{$A$, $B$}
+				\State \textit{lenA} $\gets\ A.length$
+				\State \textit{lenB} $\gets\ B.length$
+				\State \textit{p} $\gets\ \{\{0\}*(\textit{lenA}+1)\}*(\textit{lenB}+1)$
+				\For{$i\ \in [0..\textit{lenB}$}
+				\State $p[0][i]\ \gets 1$
+				\EndFor
+				\For{$i\ \in [1..\textit{lenA}]$}
+				\For{$j\ \in [1..\textit{lenB}]$}
+				\If{$A[i-1]\ =\ B[j-1]$}
+				\State \textit{p}$[i][j]\ \gets\ \textit{p}[i-1][j-1]\ +\ \textit{p}[i-1][j]$
+				\Else
+				\State \textit{p}$[i][j]\ \gets\ \textit{p}[i-1][j]$
+				\EndIf
+				\EndFor
+				\EndFor
+				\Return \textit{p}[\textit{lenA}][\textit{lenB}]
+				\EndFunction
+		\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}
+		\begin{algorithmic}
+				\Function{Most Valuable Path}{$A$, $n$}
+				\State \textit{mvp} $\gets\ \{\{0\} * (n + 1)\} * (n + 1)$
+				\For{$i\ \in\ [0..n]$}
+				\State \textit{mvp}$[i][0]\ \gets\ 0$
+				\State \textit{mvp}$[0][i]\ \gets\ 0$
+				\EndFor
+				\For{$i\ \in\ [1..n]$}
+				\For{$j\ \in\ [1..n]$}
+				\State \textit{mvp}$[i][j]\ \gets$ \Call{max}{\textit{mvp}$[i-1][j]$, \textit{mvp}$[i][j-1]$}
+				\State \textit{mvp}$[i][j]\ \gets\ \textit{mvp}[i][j]\ +\ A[i][j]$
+				\EndFor
+				\EndFor
+				\Return \textit{mvp}$[n][n]$
+				\EndFunction
+		\end{algorithmic}
+		\begin{algorithmic}
+				\Function{Annotated Most Valuable Path}{$A$, $n$}
+				\State \textit{mvp} $\gets\ \{\{0\} * (n + 1)\} * (n + 1)$
+				\State \textit{ap} $\gets\ \{\{\text{``"}\} * (n + 1)\} * (n + 1)$
+				\For{$i\ \in\ [0..n]$}
+				\For{$j\ \in\ [0..n]$}
+				\If{\textit{mvp}$[i-1][j]\ >\ \textit{mvp}[i][j-1]$}
+				\State \textit{mvp}$[i][j]\ \gets\ \textit{mvp}[i-1][j]\ +\ A[i][j]$
+				\State \textit{ap}$[i][j]\ \gets$ \Call{Concatenate}{\textit{ap}$[i-1][j]$, "D"}
+				\Else
+				\State \textit{mvp}$[i][j]\ \gets\ \textit{mvp}[i][j-1]\ +\ A[i][j]$
+				\State \textit{ap}$[i][j]\ \gets$ \Call{Concatenate}{\textit{ap}$[i][j-1]$, "R"}
+				\EndIf
+				\EndFor
+				\EndFor
+				\Return \textit{mvp}$[n][n]$, \textit{ap}$[n][n]$
+				\EndFunction
+		\end{algorithmic}
+\end{algorithm}
+
+\end{document}
+
+
+
