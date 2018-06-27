@@ -51,17 +51,45 @@
 						\item As this is the minimal cut, you have disconnected the cables with least total  bandwidth, but still cut computers $P$ of from computers $Q$
 				\end{itemize}
 
+				\clearpage
 		\item You work for a new private university which wants to keep the sizes of classes small. Each class is assigned its maximal capacity - the largest number of students which can enrol in it. Students pay the same tuition fee for each class they get enrolled in. Students can apply to be enrolled in as many classes as they wish, but each of them will eventually be enrolled to at most 5 classes at any given semester. You are given the wish lists of all students, containing for each student the list of all classes they would like to enrol this particular semester and you have to chose from the classes they have put on their wish lists in which classes you will enrol them, without exceeding the maximal enrollment of any of the classes and without enrolling any student into more than 5 classes. Your goal is, surprisingly, to maximise the income from the tuition fees for your university. Design an efficient algorithm for such a task.
+				\begin{itemize}
+						\item Create a source that connects to all students
+						\item Set capacity of links between source and each student to 5
+						\item Creat sink that connects to all classes
+						\item Set capacity of links between sink and classes equal to the max number of students in that class
+						\item Connect students to all classes on their wish list with links of capacity 1
+						\item Use Edmonds-Karp algorithm to find maximal flow
+						\item If there is flow on a link between a student and a class then the student is in that class
+				\end{itemize}
 
 		\item  Assume each student can borrow at most 10 books from the library, and the library has three copies of each title in its inventory. Each student submits a list of books he wishes to borrow. You have to assign books to students, so that a maximal number of volumes is checked out.
+				\begin{itemize}
+						\item Source connects to all student
+						\item Capacity 10 between source and student
+						\item Students connect to all books on wishlist
+						\item Books all connect to a sink, with links capacity 3
+						\item Find max flow
+						\item Flow between book and student means student borrows book
+				\end{itemize}
 
 
-		\item The emergency services are responding to a major earthquake that has hit a wide region, and left n people injured who need to be sent to a hospital. Let $P$ be the set of $n$ people and $H$ be the set of $k$ hospitals. Several hospitals are available to treat these people, but there are some constraints:
+		\item The emergency services are responding to a major earthquake that has hit a wide region, and left $n$ people injured who need to be sent to a hospital. Let $P$ be the set of $n$ people and $H$ be the set of $k$ hospitals. Several hospitals are available to treat these people, but there are some constraints:
 				\begin{enumerate}[label={(\alph*)}]
 						\item Each injured person needs to be sent to a hospital no further than one hour drive away. Let $H_p$ be the set of hospitals that are within range for person $p$.
 						\item Each hospital $h$ has a capacity $c_h$, the maximum number of people that the hospital can receive.
 				\end{enumerate}
 				Design an efficient algorithm that determines whether it is possible to assign each person to a hospital in a way that satisfies these constraints, and returns such an assignment if so.
+				
+				\begin{itemize}
+						\item Connect source to all people
+						\item Capacity between source and each person is 1
+						\item Connect each person $p$ to all hospitals $H_p$
+						\item Connect each hospital $h$ to a sink, link capacity $c_h$
+						\item Find max flow
+						\item If max flow is $n$, then task is possible
+						\item Flow between a person and a hospital means that person goes to that hospital
+				\end{itemize}
 \end{enumerate}
 
 \end{document}

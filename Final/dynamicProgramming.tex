@@ -138,7 +138,7 @@
 				\item You are given a sequence of numbers with operations $+,\ -,\ \times$ in between, for example $1\ +\ 2\ -\ 3\ \times\ 6\ -\ 1\ -\ 2\ \times\ 3\ -\ 5\ \times\ 7\ +\ 2\ -\ 8\ \times\ 9$. Your task is to place brackets in a way that the resulting expression has the largest possible value.
 
 				\item You have an amount of money $M$ and you are in a candy store. There are $n$ kinds of candies and for each candy you know how much pleasure you get by eating it, which is a number between 1 and 100, as well as the price of each candy. Your task is to chose which candies you are going to buy to maximise the total pleasure you will get by gobbling them all.
-
+				\clearpage
 				\item You have invented a new version of hopscotch! On the ground you have drawn a line of $n\ +\ 1$ evenly spaced hopscotch squares indexed from $0$ to $n$, and have written an integer (positive or negative) in each square. These squares can be represented by an array $A[0..n]$ where $A[i]$ is the number written in the square with index $i$. You start in square $0$ and will hop until you reach square $n$. Each time, you will jump from the current square to a square with a strictly greater index. Specifically, if you are at square with index $i$ then you will jump to a square with index $i\ +\ k$ for some $k\ >\ 0$. Since hopping is tiring, the length of each jump cannot exceed the length of the previous jump. Your first jump may be of any length. Your score from such a jump sequence is the sum of the scores in all squares you have hopped onto. What is the maximum score you can earn?
 						\begin{enumerate}
 								\item Design an O($n^3$) time algorithm that determines the maximum score you can earn.
@@ -187,6 +187,7 @@
 
 						\begin{enumerate}
 								\item Given a sequence of letters $S$, find efficiently its longest subsequence (not necessarily contiguous) which is a palindrome. Thus, we are looking for a longest palindrome which can be obtained by crossing out some of the letters of the initial sequence without permuting the remaining letters.
+
 								\item Find the total number of occurrences of all subsequences of S which are palindromes of any length $\geq$ 3.
 						\end{enumerate}
 
@@ -197,6 +198,7 @@
 						\end{itemize} 
 				Each lily pad has some number of flies on it. Design an algorithm that maximises the total number of flies on lily pads the frog lands on getting to the rightmost lily pad.
 
+				\clearpage
 				\item You have been handed responsibility for a business in Texas for the next N days. At the beginning of each day, you may hire an illegal worker, keep the number of illegal workers the same or fire an illegal worker. At the end of each day, there will be an inspection. The inspector on the $i^{th}$ day will check that you have between $l_i$ and $r_i$ illegal workers (inclusive). If you do not, you will fail the inspection. Design an algorithm that determines the fewest number of inspections you will fail if you hire and fire illegal employees optimally.
 						\begin{itemize}
 								\item The subproblem $P(i,\ j)$ is the minimum number of inspections failed during the first $i$ days, given you have $j$ workers on the $i^{th}$ day. 
@@ -248,6 +250,10 @@
 																		1 & \text{if}\ l_i\ \leq\ j\ \leq\ r_i \\
 																		0 & \text{otherwise}
 																\end{cases}
+										=
+																
+																
+																
 																\ +\ m[i-1][j-1] \\
 																&\qquad\qquad\textbf{fi} \\
 																&\qquad\qquad j\ \gets\ j\ +\ 1 \\
@@ -259,6 +265,9 @@
 						\end{itemize}
 
 				\item Devise a dynamic programming algorithm that counts the number of non-decreasing sequences of integers of length $N$, such that the numbers are between $0$ and $M$ inclusive.
+						\begin{description}
+								\item[Subproblem] ``The number of non-decreasing sequences of integers of length $i\ \leq\ N$''
+								\item[Recursion] For input array $a$ if some number $a[i]\ \geg\ a[i-1]$ 
 
 				\item You are given a rooted tree. Each edge of the tree has a cost for removing it. Devise an algorithm to compute the minimum total cost of removing edges to disconnect the root from all the leaves of the tree.
 
